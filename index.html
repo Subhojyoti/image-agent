@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentic Planning with Reasoning for Image Styling via Offline RL</title>
+<meta name="description" content="A compact vision-language planner decomposes styling goals into tool calls with explicit reasoning, trained with offline RL on 30K synthetic trajectories. arXiv 2603.07148.">
+<meta property="og:title" content="Agentic Planning with Reasoning for Image Styling via Offline RL">
+<meta property="og:description" content="Tool-based planning with chain-of-thought, trained with reward-weighted offline RL. 30K-trajectory dataset released.">
+<meta property="og:image" content="assets/human/Img-agent1.webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+
+<nav class="nav">
+  <a href="#top" class="brand">ImageAgent</a>
+  <a href="#explorer">Explorer</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#method">Method</a>
+  <a href="#dataset">Dataset</a>
+  <a href="#results">Results</a>
+  <a class="nav-cta" href="https://huggingface.co/datasets/subhojyoti1990/image-agent-styling">Dataset</a>
+</nav>
+
+<header class="hero">
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="track-a"></div>
+    <div class="track rev" id="track-b"></div>
+    <div class="track" id="track-c"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="venue">arXiv 2603.07148</div>
+    <h1>Agentic Planning with Reasoning for <span class="grad">Image Styling</span> via Offline RL</h1>
+    <div class="authors">
+      <span>Subhojyoti Mukherjee</span>
+      <span>Stefano Petrangeli</span>
+      <span>Branislav Kveton</span>
+      <span>Trung Bui</span>
+      <span>Franck Dernoncourt</span>
+      <span>Arko Mukherjee</span>
+    </div>
+    <div class="affil">Adobe Research, San Jose, CA, USA</div>
+    <p class="tagline">A compact open-source planner turns a vague styling goal into a sequence of interpretable tool calls, each with explicit reasoning, and outperforms GPT-4o and Gemini 2.5 zero-shot planners on the majority of tasks.</p>
+    <div class="links">
+      <a class="btn primary" href="https://huggingface.co/datasets/subhojyoti1990/image-agent-styling">Dataset on Hugging Face</a>
+      <a class="btn" href="https://arxiv.org/abs/2603.07148">Paper</a>
+      <a class="btn" href="https://arxiv.org/pdf/2603.07148">PDF</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b class="count" data-to="30" data-suf="K">0</b><span>trajectories</span></div>
+      <div class="stat"><b class="count" data-to="3">0</b><span>complexity tiers</span></div>
+      <div class="stat"><b class="count" data-to="30">0</b><span>composable actions</span></div>
+      <div class="stat"><b class="count" data-to="24">0</b><span>settings vs Gemini 2.5</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="wrap">
+  <h2>Abstract</h2>
+  <div class="abstract">
+    Direct prompt-based editing often fails on complex transformations because vague and subjective prompts often require nuanced understanding of what should be changed in the image. Our core intuition is that leveraging compositional image editing tools rather than direct prompting profits from structured agent-level planning with explicit reasoning, leading to better results. This structured planning framework enables efficient offline RL post-training on quality-scored trajectories to improve performance. We present a tool-based agentic RL post-training framework that addresses this through structured planning with chain-of-thought reasoning. Our key contributions include: (1) A tool-based agentic planning methodology that combines a compositional library of orthogonal primitive transformations, structured context representation, and explicit per-step reasoning to decompose complex styling into interpretable tool sequences. (2) A synthetic data generation pipeline producing three large-scale datasets (each ~10K trajectories) with reasoning chains, plans, and quality scores&mdash;necessary because no existing datasets provide explicit tool-based styling supervision. Our datasets are publicly available on <a href="https://huggingface.co/datasets/subhojyoti1990/image-agent-styling">Hugging Face</a>. (3) An empirical study of offline RL training methods for vision-language tool-use planning, adapting Reward-Weighted (RW) and Standardized Reward-Weighted (SW) methods&mdash;previously validated only in text-only settings&mdash;to this domain for the first time, consistently improving over the Edit-Only baseline in visual quality and instruction following. (4) Comprehensive evaluation across 4B and 8B parameter Qwen3-VL models showing that our methods outperform other baselines in the majority of the compositional tasks, backed up by human evaluations on both the synthetic data and final results.
+    <br><br>Our work demonstrates that structured planning with reward-aware training enables models to produce higher-quality images that better follow user instructions compared to direct editing approaches. Comprehensive evaluation on Qwen3-VL 4B/8B shows our compact open-source planners outperform GPT-4o and Gemini 2.5 zero-shot baseline planners on the majority of tasks, confirmed by human evaluation.
+  </div>
+</section>
+
+<section class="wrap" id="explorer">
+  <h2>Interactive Explorer</h2>
+  <p class="hint">Pick a scene and a method. Every example is a real planner output from the paper; the prompt is the instruction the planner received.</p>
+  <div class="chips" id="filter-chips"></div>
+  <div class="thumbs" id="thumbs"></div>
+  <div class="explorer">
+    <div class="pane">
+      <div class="pane-label">Original</div>
+      <img id="ex-orig" alt="Original image">
+    </div>
+    <div class="pane">
+      <div class="pane-label" id="ex-method-label">SW (ours)</div>
+      <img id="ex-out" alt="Edited image">
+    </div>
+  </div>
+  <div class="chips methods" id="method-chips"></div>
+  <img id="ex-prompt" class="prompt-img" alt="Prompt">
+  <details class="strip-details">
+    <summary>Show the full 10-way comparison strip</summary>
+    <img id="ex-strip" alt="Full comparison strip" loading="lazy">
+  </details>
+</section>
+
+<section class="wide" id="gallery">
+  <div class="wrap">
+    <h2>Gallery</h2>
+    <p class="hint">Edits by our SW and RW planners. Hover (or tap) a card to see the original.</p>
+  </div>
+  <div class="masonry" id="masonry"></div>
+</section>
+
+<section class="wrap" id="method">
+  <h2>Method</h2>
+  <div class="cards">
+    <div class="card"><div class="num">01</div><h3>Tool-based planning</h3>
+      <p>A library of orthogonal primitives (time of day, artistic medium, mood lighting, ...) composes complex edits as 2&ndash;5 step plans.</p></div>
+    <div class="card"><div class="num">02</div><h3>Reasoning per step</h3>
+      <p>Structured context encodes the image's current state, and the planner explains each tool choice before calling it.</p></div>
+    <div class="card"><div class="num">03</div><h3>Reward-weighted offline RL</h3>
+      <p>RW weights trajectories by quality score. SW adds z-score normalization for stability across reward distributions.</p></div>
+  </div>
+  <p class="hint" style="margin-top:22px">Click a stage of the data-generation pipeline.</p>
+  <div class="steps" id="steps"></div>
+  <p class="stage-text" id="stage-text"></p>
+  <figure><img src="assets/human/Img-agent1.webp" alt="Four-stage data generation pipeline" loading="lazy"></figure>
+</section>
+
+<section class="wrap">
+  <h2>Reasoning Beats Direct Editing</h2>
+  <p class="hint">Original, direct-edit baseline, the dataset's ground-truth target, and our SW planner.</p>
+  <div class="ex-rows" id="reason-rows"></div>
+</section>
+
+<section class="wide dark" id="dataset">
+  <div class="wrap">
+    <h2>The Dataset</h2>
+    <p class="lead">Three tiers of image-styling trajectories, each with image analysis, tool plans, reasoning chains, edited images, and multi-dimensional reward scores. All images are generated with HiDream-I1-Dev. MIT license.</p>
+    <div class="cards dcards">
+      <div class="card"><div class="tier">Simple</div><b>10K</b><p>1&ndash;2 step atomic edits, 10 actions, 31 locations.</p></div>
+      <div class="card"><div class="tier">Regular</div><b>10K</b><p>3&ndash;5 step compositional edits with constraints, 20 actions, 10 interior-design themes.</p></div>
+      <div class="card"><div class="tier">Complex</div><b>10K</b><p>Multi-dimension edits with integrated constraints, 30 actions, 83 diverse themes.</p></div>
+    </div>
+    <h3>Before and after, straight from the data</h3>
+    <div class="compare-grid" id="compare-grid"></div>
+    <a class="btn primary big" href="https://huggingface.co/datasets/subhojyoti1990/image-agent-styling">Browse the dataset on Hugging Face</a>
+  </div>
+</section>
+
+<section class="wrap" id="results">
+  <h2>Results</h2>
+  <p class="hint">Overall image score (0&ndash;100) from three LLM judges. Pick a dataset, planner configuration, and judge.</p>
+  <div class="selectors">
+    <div class="chips" id="r-ds"></div>
+    <div class="chips" id="r-cfg"></div>
+    <div class="chips" id="r-judge"></div>
+  </div>
+  <div class="bars" id="bars"></div>
+  <p class="note">B baseline, E Edit-Only, S Standard, R RL, RW / SW our reward-weighted methods, D DPO. GPT-4o and Gemini 2.5 are zero-shot reference planners. Triple-judge agreement subsets where feasible; see the paper.</p>
+
+  <h3>Human evaluation</h3>
+  <div class="human">
+    <figure><img src="assets/human/normal_method_win_rates.webp" alt="Regular win rates" loading="lazy"><figcaption>Regular: first-place win rates.</figcaption></figure>
+    <figure><img src="assets/human/complex_method_win_rates.webp" alt="Complex win rates" loading="lazy"><figcaption>Complex: first-place win rates.</figcaption></figure>
+    <figure><img src="assets/human/complexv2_method_win_rates.webp" alt="Complex v2 win rates" loading="lazy"><figcaption>Complex (second split): first-place win rates.</figcaption></figure>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>BibTeX <button id="copy-bib" class="copy">Copy</button></h2>
+<pre id="bib">@article{mukherjee2026agentic,
+  title   = {Agentic Planning with Reasoning for Image Styling via Offline RL},
+  author  = {Mukherjee, Subhojyoti and Petrangeli, Stefano and Kveton, Branislav and Bui, Trung and Dernoncourt, Franck and Mukherjee, Arko},
+  journal = {arXiv preprint arXiv:2603.07148},
+  year    = {2026}
+}</pre>
+</section>
+
+</main>
+
+<footer>
+  Dataset: <a href="https://huggingface.co/datasets/subhojyoti1990/image-agent-styling">huggingface.co/datasets/subhojyoti1990/image-agent-styling</a> &middot; MIT License
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

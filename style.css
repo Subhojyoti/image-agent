@@ -37,6 +37,7 @@ h1 { font-size:3rem; line-height:1.15; margin:0 0 16px; text-shadow:0 2px 30px r
 .btn.primary { background:linear-gradient(90deg,var(--a),var(--b)); border:0; box-shadow:0 0 28px rgba(255,79,163,.4); }
 .btn.primary:hover { transform:translateY(-2px) scale(1.03); box-shadow:0 0 40px rgba(124,92,255,.7); }
 .btn.off { opacity:.5; cursor:default; }
+.dl { margin-top:14px; font-weight:700; font-size:1.05rem; color:#ff3b3b; text-align:center; }
 .btn.big { margin-top:28px; padding:14px 34px; font-size:1.05rem; }
 .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin-top:34px; }
 .stat { background:rgba(21,21,38,.8); backdrop-filter:blur(6px); border:1px solid var(--line); border-radius:14px; padding:14px; }
